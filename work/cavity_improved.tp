@@ -1,0 +1,329 @@
+ApplicationControl {
+  CheckParameter = "off"
+  DryRunBC       = "off"
+  Operator       = "Kenji_Ono"
+}
+
+AXB {
+  Func = "off"
+}
+
+BcTable {
+
+  Boundary {
+    obstacle
+    {
+      kind               = "inner"
+      class              = "Obstacle"
+      Medium             = "Fe"
+      filepath           = "./geometry/obstacle.stl"
+    }
+
+    outerWall {
+      kind        = "outer"
+      class       = "Wall"
+      Type        = "fixed"
+      Medium      = "fe"
+    }
+
+    slideWall {
+      kind              = "outer"
+      class             = "wall"
+      Type              = "slide"
+      Profile           = "Constant"
+      OrientationVector = (1.0, 0.0, 0.0)
+      Velocity          = 1.0
+      Medium            = "fe"
+    }
+
+  }
+  OuterBC {
+    Xminus = "outerWall"
+    Xplus  = "outerWall"
+    Yminus = "outerWall"
+    Yplus  = "outerWall"
+    Zminus = "outerWall"
+    Zplus  = "slideWall"
+  }
+}
+
+
+ConvectionTerm {
+  Scheme  = "O2central"
+}
+
+
+DomainInfo {
+  UnitOfLength   = "NonDimensional"
+  GlobalOrigin   = (-0.5, -0.1, -0.5 )
+  GlobalRegion   = ( 1.0,  0.2,  1.0 )
+  // Changed: Increase Y cells for better convergence
+  GlobalVoxel    = ( 32,    8,   32 )   // Y: 4 -> 8 cells
+}
+
+
+FillHint {
+  outer {
+    direction = "Xminus"
+    medium    = "air"
+  }
+  // Removed inner hint (not supported by code)
+}
+
+
+GeometryModel {
+  Source        = "polygon"
+}
+
+
+GoverningEquation {
+  FlowEquation       = "Incompressible"
+  HeatEquation       = "FlowOnly"   // Changed: ColdFlow -> FlowOnly
+  Buoyancy           = "NoBuoyancy"
+  TimeVariation      = "Unsteady"
+  PDEType            = "NavierStokes"
+}
+
+
+IntrinsicExample {
+  FluidMedium = "air"
+  SolidMedium = "fe"
+  CheckEven   = "yes"
+  Dimension   = "3d"
+}
+
+
+Iteration {
+  LinearSolver[@] {
+    Alias                = "sor2"
+    class                = "sor2sma"
+    MaxIteration         = 1000      // Changed: 500 -> 1000
+    ResidualCriterion    = 1.0e-4
+    ResidualNorm         = "RbyB"    // Changed: RbyX -> RbyB (more stable)
+    ErrorNorm            = "DeltaXbyX"
+    Omega                = 1.15      // Changed: 1.1 -> 1.15 (slightly higher)
+    CommMode             = "async"
+  }
+
+  LinearSolver[@] {
+    Alias                = "sor"
+    class                = "sor"
+    MaxIteration         = 1000
+    ResidualCriterion    = 1.0e-4
+    ResidualNorm         = "RbyB"
+    ErrorNorm            = "DeltaXbyX"
+    Omega                = 1.15
+  }
+
+  LinearSolver[@] {
+    Alias                = "bicg"
+    class                = "bicgstab"
+    MaxIteration         = 1000
+    ResidualCriterion    = 1.0e-4
+    ResidualNorm         = "RbyB"
+    ErrorNorm            = "DeltaXbyX"
+    Preconditioner       = "sor2sma"
+    InnerIteration       = 10        // Changed: 5 -> 10
+    Omega                = 1.1
+    CommMode             = "async"
+  }
+
+  DivMaxIteration        = 50
+  DivCriterion           = 1.0e-4
+  DivNorm                = "max"
+
+  // Changed: Use BiCGSTAB for better convergence
+  Pressure    = "bicg"
+  Velocity    = ""
+  Temperature = ""
+}
+
+
+MediumTable {
+
+  Air {
+    state               = "Fluid"
+    MassDensity         = 1.1763
+    SpecificHeat        = 1007
+    ThermalConductivity = 2.614e-02
+    KinematicViscosity  = 15.83e-06
+    Viscosity           = 18.62e-06
+    SpeedOfSound        = 340.0
+    VolumeExpansion     = 0.04e-3
+  }
+
+  Fe {
+    state               = "Solid"
+    MassDensity         = 7870.0
+    SpecificHeat        = 442.0
+    ThermalConductivity = 80.3
+  }
+}
+
+
+MonitorList {
+  Log             = "Off"
+  OutputMode      = "gather"
+  Sampling {
+    TemporalType  = "step"
+    Interval      = 10
+  }
+
+  list[@] {
+    type            = "cylinder"
+    label           = "cyl_1"
+    SamplingMethod  = "nearest"
+    SamplingMode    = "Fluid"
+    Variables {
+      velocity      = "off"
+      vorticity     = "off"
+      totalPressure = "on"
+    }
+    normal = (1.0, 0.0, 0.0)
+    center = (0.0, 0.0, 0.0)
+    depth  = 0.1
+    radius = 0.15
+  }
+}
+
+
+Output {
+  Log {
+    Base             = "On"
+    Profiling        = "On"
+    WallInfo         = "Off"
+    Console {
+      TemporalType   = "Step"
+      Interval       = 1
+    }
+    History {
+      TemporalType   = "Step"
+      Interval       = 1
+    }
+  }
+
+  Data {
+    Format          = "sph"
+    TimeSlice       = "off"
+    DirectoryPath   = "hoge"
+
+    BasicVariables {
+      TemporalType   = "step"
+      Interval       = 100
+
+      TotalPressure  = "Off"
+      Helicity       = "Off"
+      Vorticity      = "Off"
+      Qcriterion     = "Off"
+    }
+
+    StatisticalVariables {
+      TemporalType    = "step"
+      Interval        = 100
+
+      VelocityStat    = "On"
+      PressureStat    = "Off"
+      TemperatureStat = "Off"
+      ReynoldsStress  = "On"
+    }
+  }
+
+  FormatOption {
+    SPH {
+      GuideOut        = 2
+    }
+
+    PLOT3D {
+      XYZfile         = "on"
+      IblankFile      = "on"
+    }
+  }
+}
+
+
+Reference {
+  Length        = 1.0
+  Velocity      = 1.0
+  BasePressure  = 0.0
+  Medium        = "air"
+  Temperature {
+    Base       = 20.0
+    Difference = 35.0
+  }
+  Reynolds      = 1000.0
+  Prandtl       = 0.71
+}
+
+
+ReferenceFrame {
+  Mode = "Stationary"
+}
+
+
+ShapeApproximation {
+  Method = "Binary"
+}
+
+
+SolvingMethod {
+  Flow = "FS_C_EE_D_EE"
+  Heat = "C_EE_D_EE"
+}
+
+
+StartCondition {
+  Restart {
+    Staging     = "off"
+
+    DFIfiles {
+      Velocity    = "vel.dfi"
+      Pressure    = "prs.dfi"
+      Fvelocity   = "fvel.dfi"
+      Instantaneous = "field.dfi"
+      Statistic     = "field_stat.dfi"
+    }
+  }
+
+  InitialState {
+    MassDensity = 1.0
+    Pressure    = 0.0
+    Velocity    = (0.0, 0.0, 0.0)
+  }
+}
+
+TimeControl {
+  Acceleration {
+    TemporalType     = "Time"
+    AcceleratingTime = 1.0
+  }
+
+  TimeStep {
+    Mode           = "CFLReferenceVelocity"
+    DeltaT         = 0.05   // Changed: 0.1 -> 0.05 (smaller for initial stability)
+  }
+
+  Session {
+    TemporalType   = "step"
+    Start          = 0
+    End            = 2000   // Changed: 1000 -> 2000 (more steps with smaller dt)
+  }
+
+  Statistic {
+    TemporalType   = "step"
+    Start          = 0
+    End            = 0
+  }
+}
+
+
+TurbulenceModeling {
+  Model = "no"
+  Cs    = 0.2
+  InitialPerturbation = "off"
+}
+
+Unit {
+  UnitOfInputParameter  = "nonDimensional"
+  UnitOfOutput          = "nonDimensional"
+  Pressure              = "Gauge"
+}
