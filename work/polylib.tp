@@ -1,0 +1,10 @@
+Polylib {
+  obstacle {
+    class_name = "PolygonGroup"
+    filepath   = "./geometry/CaseH.stl"
+    movable    = "false"
+    label      = "Fe"
+    type       = "Obstacle"
+  }
+
+}
