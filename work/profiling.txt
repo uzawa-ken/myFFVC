@@ -1,0 +1,68 @@
+
+# PMlib Basic Report -------------------------------------------------------
+
+	Timing Statistics Report from PMlib version 6.4.2
+	Linked PMlib supports: MPI, OpenMP, no-HWPC, no-OTF
+	Host name : DESKTOP-PC
+	Date      : 2025/12/19 : 00:00:32
+	Kenji_Ono
+	Parallel Mode:   OpenMP (16 threads)
+
+	PMlib enabled elapse time (from initialize to print) = 4.109e+01 [sec]
+	Exclusive sections and inclusive sections are reported below.
+	Inclusive sections, marked with (*), are not added in the statistics total.
+
+	Section                     |    call  |        accumulated time[sec]           | user defined numerical performance
+	Label                       |          |      avr   avr[%]     sdv    avr/call  |  operations   sdv    performance
+	----------------------------+----------+----------------------------------------+----------------------------
+	Time_Step_Loop_Section(*)   :     1000   4.106e+01  99.92  0.00e+00  4.106e-02    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Flow_Section(*)             :     1000   4.043e+01  98.40  0.00e+00  4.043e-02    0.000e+00  0.00e+00   0.00 Mflops(*)
+	VP-Iteration_Section(*)     :     1000   4.016e+01  97.74  0.00e+00  4.016e-02    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Velocity_BC                 :   453628   1.662e+01  40.45  0.00e+00  3.664e-05    0.000e+00  0.00e+00   0.00 Mflops
+	Projection_Velocity_BC      :   453628   9.781e+00  23.80  0.00e+00  2.156e-05    0.000e+00  0.00e+00   0.00 Mflops
+	2-colored_SOR_stride(*)     :   453628   6.044e+00  14.71  0.00e+00  1.332e-05    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Poisson_SOR2_SMA            :   944168   5.468e+00  13.31  0.00e+00  5.791e-06    1.102e+11  0.00e+00  20.16 Gflops
+	Projection_Velocity         :   453628   5.207e+00  12.67  0.00e+00  1.148e-05    1.561e+11  0.00e+00  29.98 Gflops
+	Norm_Div_max                :   453628   2.078e+00   5.06  0.00e+00  4.582e-06    3.716e+09  0.00e+00   1.79 Gflops
+	Loop_Utility_Section(*)     :     1000   5.959e-01   1.45  0.00e+00  5.959e-04    0.000e+00  0.00e+00   0.00 Mflops(*)
+	History_out                 :     4000   2.676e-01   0.65  0.00e+00  6.690e-05    0.000e+00  0.00e+00   0.00 Mflops
+	Force_Calculation           :     1000   2.614e-01   0.64  0.00e+00  2.614e-04    5.493e+06  0.00e+00  21.01 Mflops
+	Poisson_BC                  :   944168   1.625e-01   0.40  0.00e+00  1.721e-07    0.000e+00  0.00e+00   0.00 Mflops
+	NS__F_Step_Section(*)       :     1000   1.249e-01   0.30  0.00e+00  1.249e-04    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Poisson__Source_Section(*)  :     1000   1.238e-01   0.30  0.00e+00  1.238e-04    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Poisson_Src_VBC             :     1000   9.105e-02   0.22  0.00e+00  9.105e-05    0.000e+00  0.00e+00   0.00 Mflops
+	Pvec_Flux_BC                :     1000   5.481e-02   0.13  0.00e+00  5.481e-05    1.536e+07  0.00e+00 280.26 Mflops
+	Pvec_Central                :     1000   3.377e-02   0.08  0.00e+00  3.377e-05    1.536e+09  0.00e+00  45.49 Gflops
+	Initialization_Section(*)   :        1   3.032e-02   0.07  0.00e+00  3.032e-02    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Search_Vmax                 :     1000   2.865e-02   0.07  0.00e+00  2.865e-05    3.687e+07  0.00e+00   1.29 Gflops
+	Voxel_Prep_Section(*)       :        1   2.628e-02   0.06  0.00e+00  2.628e-02    0.000e+00  0.00e+00   0.00 Mflops(*)
+	File_Output                 :       10   2.628e-02   0.06  0.00e+00  2.628e-03    2.703e+06  0.00e+00 102.87 Mflops
+	Copy_Array                  :     1000   2.158e-02   0.05  0.00e+00  2.158e-05    0.000e+00  0.00e+00   0.00 Mflops
+	SDF_Section(*)              :        1   1.965e-02   0.05  0.00e+00  1.965e-02    0.000e+00  0.00e+00   0.00 Mflops(*)
+	NS__Loop_Post_Section(*)    :     1000   1.903e-02   0.05  0.00e+00  1.903e-05    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Poisson_Src_Norm            :     1000   1.865e-02   0.05  0.00e+00  1.865e-05    1.639e+07  0.00e+00 879.27 Mflops
+	Domain_Monitor              :     1000   1.832e-02   0.04  0.00e+00  1.832e-05    0.000e+00  0.00e+00   0.00 Mflops
+	Divergence_of_Pvec          :     1000   1.236e-02   0.03  0.00e+00  1.236e-05    1.352e+08  0.00e+00  10.94 Gflops
+	Pvec_Euler_Explicit         :     1000   1.136e-02   0.03  0.00e+00  1.136e-05    3.277e+07  0.00e+00   2.88 Gflops
+	Variation_Space             :     1000   9.860e-03   0.02  0.00e+00  9.860e-06    2.662e+08  0.00e+00  27.00 Gflops
+	Cut_Section(*)              :        1   3.149e-03   0.01  0.00e+00  3.149e-03    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Cut_Information             :        1   3.148e-03   0.01  0.00e+00  3.148e-03    0.000e+00  0.00e+00   0.00 Mflops
+	Encode_BCindex              :        1   1.197e-03   0.00  0.00e+00  1.197e-03    0.000e+00  0.00e+00   0.00 Mflops
+	Pvec_BC                     :     1000   7.043e-04   0.00  0.00e+00  7.043e-07    0.000e+00  0.00e+00   0.00 Mflops
+	Polylib_Section(*)          :        1   3.256e-04   0.00  0.00e+00  3.256e-04    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Fill                        :        1   1.340e-04   0.00  0.00e+00  1.340e-04    0.000e+00  0.00e+00   0.00 Mflops
+	Loading_Polygon_File        :        1   1.233e-04   0.00  0.00e+00  1.233e-04    0.000e+00  0.00e+00   0.00 Mflops
+	Gather_DomainInfo           :        1   1.003e-04   0.00  0.00e+00  1.003e-04    0.000e+00  0.00e+00   0.00 Mflops
+	Allocate_Arrays             :        3   8.823e-05   0.00  0.00e+00  2.941e-05    0.000e+00  0.00e+00   0.00 Mflops
+	Statistic(*)                :        1   7.449e-05   0.00  0.00e+00  7.449e-05    0.000e+00  0.00e+00   0.00 Mflops(*)
+	Distributing_Polygon        :        1   1.451e-05   0.00  0.00e+00  1.451e-05    0.000e+00  0.00e+00   0.00 MB/sec
+	Get_Accurate_BC_Area        :        1   2.593e-06   0.00  0.00e+00  2.593e-06    0.000e+00  0.00e+00   0.00 Mflops
+	Restart_Process             :        1   7.700e-07   0.00  0.00e+00  7.700e-07    0.000e+00  0.00e+00   0.00 Mflops
+	Compo_Fraction              :        1   6.256e-07   0.00  0.00e+00  6.256e-07    0.000e+00  0.00e+00   0.00 Mflops
+	Search_CutRef               :        1   3.772e-07   0.00  0.00e+00  3.772e-07    0.000e+00  0.00e+00   0.00 Mflops
+	----------------------------+----------+----------------------------------------+----------------------------
+	Sections per process                     1.451e-05     -Exclusive COMM sections-  0.000e+00             0.00 MB/sec
+	Sections per process                     4.018e+01     -Exclusive CALC sections-  2.721e+11             6.77 Gflops
+	----------------------------+----------+----------------------------------------+----------------------------
+	Sections total job                       1.451e-05     -Exclusive COMM sections-  0.000e+00             0.00 MB/sec
+	Sections total job                       4.018e+01     -Exclusive CALC sections-  2.721e+11             6.77 Gflops

@@ -1,0 +1,388 @@
+
+	Welcome to FFV   	Version 
+
+	FlowBase         	Version 1.5.4
+
+	Challenge : Polygon
+
+
+----------
+
+
+	>> Tables
+
+	No. of Medium    =   2
+	No. of LocalBC   =   3
+	----------------------
+	No. of Component =   5
+
+
+----------
+
+
+	>> Medium List
+
+	  no :            Alias  Physical constant
+	 ----------------------------------------------------------------------
+	   1 :              Air
+				 Mass density         1.176300e+00 [kg/m^3]
+				 Kinematic viscosity  1.583000e-05 [m^2/s]
+				 Viscosity            1.862000e-05 [Pa s]
+				 Specific heat        1.007000e+03 [J/(Kg K)]
+				 Thermal conductivity 2.614000e-02 [W/(m K)]
+				 Speed of sound       3.400000e+02 [m/s]
+				 Volume expansion     4.000000e-05 [1/K]
+	   2 :               Fe
+				 Mass density         7.870000e+03 [kg/m^3]
+				 Specific heat        4.420000e+02 [J/(Kg K)]
+				 Thermal conductivity 8.030000e+01 [W/(m K)]
+
+
+----------
+
+	>> Fill Hint
+
+	 No.        Kind       Medium   Direction / Coordinate(ND)
+	--------------------------------------------------------------------------
+	  1          air   Direction = X-
+	  2           fe   Direction = X-
+
+----------
+
+----------
+
+	>> Polylib configuration
+
+	<< MASTER PROCESS ONLY >>
+	   Polygon Group Label       Medium Alias              Local BC     Polygons          Area
+	   ---------------------------------------------------------------------------------------
+
+
+	<< ALL PROCESSES >>
+	   Polygon Group Label       Medium Alias              Local BC     Polygons          Area
+	   ---------------------------------------------------------------------------------------
+	              obstacle                 Fe              Obstacle           12  9.600000e-01
+
+	>> Memory required for Polygon :  Global=  2.51 (KB) : Local=  2.51 (KB)
+
+
+
+----------
+
+	>> Calculate cut and quantize
+
+	quantize cut = 810
+
+
+	Minimum non-dimensional distance except on a center = 9.980431e-02
+
+
+----------
+
+	>> Global Domain Information
+
+	imax, jmax, kmax    =            32             4            32     >>   4.10 (K cells)
+
+	(dx, dy, dz)  [m] / [-] = ( 3.125000e-02  5.000000e-02  3.125000e-02)  /  ( 3.125000e-02  5.000000e-02  3.125000e-02)
+	(ox, oy, oz)  [m] / [-] = (-5.000000e-01 -1.000000e-01 -5.000000e-01)  /  (-5.000000e-01 -1.000000e-01 -5.000000e-01)
+	(Lx, Ly, Lz)  [m] / [-] = ( 1.000000e+00  2.000000e-01  1.000000e+00)  /  ( 1.000000e+00  2.000000e-01  1.000000e+00)
+
+
+----------
+
+	>> Memory required for Preprocessor :  Global=895.53 (KB) : Local=895.53 (KB)
+
+
+
+----------
+
+	>> Fill
+
+	Fill initialize -----
+
+		Total cell count       =             4096
+		Initial target count   =             4096
+
+	Fill -----
+
+		Painted FLUID cells by hint       =               60
+		Remaining cells to paint          =             4036
+
+		Connected fill Iteration          =     5
+		               Filled by FLUID    =             3460
+		               Remaining cells    =              576
+
+
+ ================
+
+ Connection Rules (ascending order)
+
+  key  : values
+    1 :
+
+ ================
+
+
+ ================
+
+ Reduced Labels
+
+  key : values
+    1 :    1
+
+ ================
+
+
+----------
+
+	>> Components
+
+	No. of Local Boundary  : 3
+	No. of Medium          : 2
+
+	No. of Fluid Medium    : 1
+	No. of Solid Medium    : 1
+
+
+----------
+
+	>> Component Information
+
+	  No :   # of Faces/Cells       State  In/Out                   Label : Class                                 Medium
+	------------------------------------------------------------------------------------------------------------------------------
+	   1 :               3520       Fluid                             Air : Medium                                Air                 
+	   2 :                576       Solid                              Fe : Medium                                Fe                  
+	   3 :                192       Solid  Inner                 obstacle : Obstacle                              Fe                  
+	   4 :                  0       Solid  Outer                outerWall : Outer BC                              fe                  
+	   5 :                  0       Solid  Outer                slideWall : Outer BC                              fe                  
+
+	This model includes    1 solid ID  [Solid cell ratio inside computational domain :  14.06250 %]
+
+
+	[Obstacle]
+	 no                    Label    i_st    i_ed    j_st    j_ed    k_st    k_ed   Area[m*m]    Elements
+	  3                 obstacle      10      23       1       4      10      23  9.6000e-01         192
+
+
+----------
+
+
+
+----------
+
+
+----------
+
+
+	>> Library Information
+
+	     CPMlib     Version 2.4.5
+	     CDMlib     Version 1.1.5
+	     Polylib    Version 3.7.2
+	     PMlib      Version 6.4.2
+	     TextParser Version 1.8.8
+
+
+----------
+
+
+	>> Solver Control Parameters
+
+	Solver Properties
+	     Basic Equation           :   Incompressible Flow Navier-Stokes Equations
+	     Time Variation           :   Unsteady
+	     Shape Approximation      :   Binary
+	     Precision                :   Double Precision 
+	     Kind of Solver           :   Cold Flow (Flow only)
+	     Flow Algorithm           :   Fractional Step
+	        Time marching scheme  :   Euler Explicit O(dt1)
+	     Convective flux scheme   :   Central O(dx^2)
+
+	Turbulence Modeling
+	     Model                    :   Nothing (DNS)
+	     Velocity Profile         :   No Slip
+	     Initial Perturbation     :   Off 
+
+	Statistic Information
+	     Pressure                 :   No
+	     Velocity                 :   No
+	     Temperature              :   No
+	     ReynoldsStress           :   No
+
+	Unit
+	     Unit of Input Parameter  :   Non-Dimensional
+	             Pressure         :   Gauge Pressure
+	             Temperature      :   Celsius
+
+	Time Control
+	     Acceleration Time        :    1.00000e+00 [sec] /  1.00000e+00 [-]
+	     Statistic Start          :   OFF
+	     Time Increment dt        :    3.12500e-03 [sec] /  3.12500e-03 [-] : CFL [ 0.10000] with Reference velocity
+	     Calculation Start        :    0.00000e+00 [sec] /  0.00000e+00 [-] :            0 [step]
+	     Calculation End          :    3.12500e+00 [sec] /  3.12500e+00 [-] :         1000 [step]
+	     Calculation Period       :    3.12500e+00 [sec] /  3.12500e+00 [-] :         1000 [step]
+
+	Start Mode
+	     Start Condition          :   Impulsive start
+
+	Parallel Mode
+	     Parallel Mode            :   OpenMP  (16 threads)
+	     Space Partitioning       :   Equal Partitioning
+
+	Logs
+	     Unit for Output          :   Non-Dimensional
+	     Base Logs                :   ON >  history_base.txt, history_compo.txt, history_domainflux.txt, history_force.txt
+	     Profiling report         :   ON >  profiling.txt
+	     Wall info. Log           :   OFF   
+
+	Intervals
+	     Base Info.(stdout)       :              1 [step]
+	     Other Histories          :              1 [step]
+	     Basic/Derived Variables  :            100 [step]
+	     Statistical Variables    :              0 [step]
+
+	Derived variables
+	     Total Pressure           :   OFF
+	     Vorticity                :   OFF
+	     Helicity                 :   OFF
+	     2nd Invariant of VGT     :   OFF
+	     Divergence               :   OFF
+	     RMS of velocity          :   OFF
+	     RMS Mean of velocity     :   OFF
+	     Reynolds Stress          :   OFF
+
+	Driver parameter
+
+	Output of coefficients Ax=b
+		Output mode              : OFF
+
+	Parameter of Linear Equation
+	     1st Pressure Iteration 
+	       Linear Solver          :   2-colored SOR SMA (Stride Memory Access, Bit compressed 1-decode)
+	       Iteration max          :   500
+	       Residual Norm type     :   r_x  : Residual vector divided by solution vector x
+	       Threshold for residual :   1.000e-04
+	       Error    Norm type     :   dx_x : Increment vector x(k+1)-x(k) divided by solution vector x(k)
+	       Threshold for error    :   8.880e-16
+	       Coef. of Acceleration  :   1.100e+00
+	       Communication Mode     :   ASYNC
+
+	     Div Iteration 
+	       Iteration max          :   500
+	       Error    Norm type     :   Max divergence
+	       Threshold for Div.     :   1.000e-04
+
+	File IO Mode
+	     Unit of File             :   Non-Dimensional
+	     IO Mode                  :   Gathered
+	     Guide cell for output    :   2
+	     I/O Directory Input      :   ""
+	     I/O Directory Output     :   "hoge"
+	     Time Slice Directory     :   Off
+	     Voxel model output       :   none
+	     BC flag output           :   Off
+	     VTK output               :   Off
+	     Debug output             :   Off
+
+----------
+
+
+	>> Simulation Parameters
+
+	Reference Medium                      :  Air
+
+	Ref. Length               [m]         :  1.00000e+00
+	Ref. Velocity             [m/s]       :  1.00000e+00
+	Base Pressure             [Pa]        :  0.00000e+00
+	Ref. Mass Density         [kg/m^3]    :  1.17630e+00
+	Ref. Specific Heat        [J/(kg K)]  :  1.00700e+03
+	Ref. Kinematic Viscosity  [m^2/s]     :  1.58300e-05
+	Ref. Speed of Sound       [m/s]       :  3.40000e+02
+	Gravity                   [m/s^2]     :  9.80000e+00
+	Mach number               [-]         :  2.94118e-03
+
+	Spacing         X-dir.    [m] / [-]   :  3.12500e-02 /  3.12500e-02
+	                Y-dir.    [m] / [-]   :  5.00000e-02 /  5.00000e-02
+	                Z-dir.    [m] / [-]   :  3.12500e-02 /  3.12500e-02
+	Time Scale                [sec]       :  1.00000e+00
+
+
+
+	Prandtl  number           [-]         :  7.10000e-01
+	Reynolds number           [-]         :  1.00000e+03
+
+
+----------
+
+
+	>> Initial Values for Physical Variables
+
+	Initial  Velocity.U  [m/s]   / [-]   :  0.00000e+00 /  0.00000e+00
+	Initial          .V  [m/s]   / [-]   :  0.00000e+00 /  0.00000e+00
+	Initial          .W  [m/s]   / [-]   :  0.00000e+00 /  0.00000e+00
+	Dynamic  Pressure    [Pa]    / [-]   :  5.88150e-01 /  1.00000e+00
+	Initial  Pressure    [Pa_g]  / [-]   :  0.00000e+00 /  0.00000e+00
+
+
+----------
+
+
+	>> Effective cells and Open Area of Computational Domain
+
+	Fluid  cell inside whole Computational domain =            3520 ( 85.9375 %)
+	Active cell                                   =            3520 ( 85.9375 %)
+
+	Face :      Element (Open ratio)
+	  X- :            0 (  0.00 %)
+	  X+ :            0 (  0.00 %)
+	  Y- :            0 (  0.00 %)
+	  Y+ :            0 (  0.00 %)
+	  Z- :            0 (  0.00 %)
+	  Z+ :            0 (  0.00 %)
+
+
+----------
+
+	>> Outer Boundary Conditions
+
+	      Set X- up as Wall : < outerWall >
+			Guide Cell Medium = Fe
+			Velocity V( 0.000e+00,  0.000e+00,  0.000e+00) [m/s] / V( 0.000e+00,  0.000e+00,  0.000e+00) [-]
+			Pressure Gradient is calculated from Navier-Stokes eqs.
+
+	      Set X+ up as Wall : < outerWall >
+			Guide Cell Medium = Fe
+			Velocity V( 0.000e+00,  0.000e+00,  0.000e+00) [m/s] / V( 0.000e+00,  0.000e+00,  0.000e+00) [-]
+			Pressure Gradient is calculated from Navier-Stokes eqs.
+
+	      Set Y- up as Wall : < outerWall >
+			Guide Cell Medium = Fe
+			Velocity V( 0.000e+00,  0.000e+00,  0.000e+00) [m/s] / V( 0.000e+00,  0.000e+00,  0.000e+00) [-]
+			Pressure Gradient is calculated from Navier-Stokes eqs.
+
+	      Set Y+ up as Wall : < outerWall >
+			Guide Cell Medium = Fe
+			Velocity V( 0.000e+00,  0.000e+00,  0.000e+00) [m/s] / V( 0.000e+00,  0.000e+00,  0.000e+00) [-]
+			Pressure Gradient is calculated from Navier-Stokes eqs.
+
+	      Set Z- up as Wall : < outerWall >
+			Guide Cell Medium = Fe
+			Velocity V( 0.000e+00,  0.000e+00,  0.000e+00) [m/s] / V( 0.000e+00,  0.000e+00,  0.000e+00) [-]
+			Pressure Gradient is calculated from Navier-Stokes eqs.
+
+	      Set Z+ up as Wall : < slideWall >
+			Guide Cell Medium = Fe
+			Velocity V( 1.000e+00,  0.000e+00,  0.000e+00) [m/s] / V( 1.000e+00,  0.000e+00,  0.000e+00) [-]
+			Pressure Gradient is calculated from Navier-Stokes eqs.
+
+
+----------
+
+	>> Memory required for Solver :  Global=  2.27 (MB) : Local=  2.27 (MB)
+
+
+
+----------
+
+
+	Particle Tracking  OFF

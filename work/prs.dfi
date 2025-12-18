@@ -1,0 +1,139 @@
+FileInfo {
+
+  DFIType            = "Cartesian"
+  DirectoryPath      = "hoge"
+  TimeSliceDirectory = "off"
+  Prefix             = "prs"
+  FileFormat         = "sph"
+  FieldFilenameFormat= "step_rank"
+  GuideCell          = 2
+  DataType           = "Float64"
+  Endian             = "little"
+  NumVariables       = 1
+  Variable[@]{ name  = "Pressure" }
+
+}
+
+FilePath {
+
+  Process = "./proc.dfi"
+
+}
+
+VisIt {
+
+  PlotGuideCell = "off"
+  ResultFormat  =  "FBinary"
+
+}
+
+UnitList {
+
+  Length {
+    Unit       = "NonDimensional"
+    Reference  = 1.000000e+00
+  }
+  Pressure {
+    Unit       = "NonDimensional"
+    Reference  = 0.000000e+00
+    Difference = 1.176300e+00
+  }
+  Velocity {
+    Unit       = "NonDimensional"
+    Reference  = 1.000000e+00
+  }
+
+}
+
+TimeSlice {
+
+  Slice[@] {
+    Step = 0
+    Time = 0.000000e+00
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+  Slice[@] {
+    Step = 100
+    Time = 3.125000e-01
+    MinMax[@] {
+      Min = -3.371198e-02
+      Max = 3.437212e-02
+    }
+  }
+  Slice[@] {
+    Step = 200
+    Time = 6.250000e-01
+    MinMax[@] {
+      Min = -8.932684e-02
+      Max = 1.108146e-01
+    }
+  }
+  Slice[@] {
+    Step = 300
+    Time = 9.375000e-01
+    MinMax[@] {
+      Min = -9.527472e-02
+      Max = 1.970951e-01
+    }
+  }
+  Slice[@] {
+    Step = 400
+    Time = 1.250000e+00
+    MinMax[@] {
+      Min = -7.346072e-02
+      Max = 2.608535e-01
+    }
+  }
+  Slice[@] {
+    Step = 500
+    Time = 1.562500e+00
+    MinMax[@] {
+      Min = -6.764865e-02
+      Max = 3.010848e-01
+    }
+  }
+  Slice[@] {
+    Step = 600
+    Time = 1.875000e+00
+    MinMax[@] {
+      Min = -6.571087e-02
+      Max = 3.214265e-01
+    }
+  }
+  Slice[@] {
+    Step = 700
+    Time = 2.187500e+00
+    MinMax[@] {
+      Min = -6.487475e-02
+      Max = 3.313899e-01
+    }
+  }
+  Slice[@] {
+    Step = 800
+    Time = 2.500000e+00
+    MinMax[@] {
+      Min = -6.458501e-02
+      Max = 3.359160e-01
+    }
+  }
+  Slice[@] {
+    Step = 900
+    Time = 2.812500e+00
+    MinMax[@] {
+      Min = -6.459549e-02
+      Max = 3.377448e-01
+    }
+  }
+  Slice[@] {
+    Step = 1000
+    Time = 3.125000e+00
+    MinMax[@] {
+      Min = -6.475729e-02
+      Max = 3.383423e-01
+    }
+  }
+}
+
