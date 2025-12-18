@@ -1,0 +1,382 @@
+
+ApplicationControl {
+  CheckParameter      = "Off"
+  Operator            = "Kenji_Ono"
+}
+
+
+BcTable {
+
+  Boundary {
+      
+    outerWall {
+      kind        = "outer"
+      class       = "Wall"
+      Type        = "fixed"
+      Medium      = "fe"
+    }
+
+    slideWall {
+      kind        = "outer"
+      class       = "wall"
+      Type        = "slide"
+      Profile     = "Constant"
+      OrientationVector = (-1.0, 0.0, 0.0)
+      Velocity    = 1.8e-2
+      Medium      = "fe"
+    }
+  }
+
+  outerBC {
+    Xminus = "outerWall"
+    Xplus  = "outerWall"
+    Yminus = "slideWall"
+    Yplus  = "outerWall"
+    Zminus = "outerWall"
+    Zplus  = "outerWall"
+  }
+
+}
+
+
+ConvectionTerm {
+  Scheme  = "O3MUSCL"
+  Limiter = "minmod"
+}
+
+
+DomainInfo {
+  UnitOfLength   = "M"
+  GlobalOrigin   = (-3.1e-2, -3.1e-2, -6.2e-2   )
+  GlobalRegion   = (6.2e-2,  6.2e-2,  1.24e-1   )
+  GlobalVoxel    = (64   , 64   , 128  )
+  
+  //GlobalPitch    = (1.5625e-02, 1.5625e-02, 1.5625e-02)
+  //GlobalDivision = (1    , 1    , 1    )
+
+}
+
+
+FillHint {
+  outer {
+    kind      = "outerface"
+    direction = "Xminus"
+    medium    = "water"
+  }
+}
+
+
+GeometryModel {
+  Source                  = "rectangular"
+  VoxelOutput             = "off"
+}
+
+
+GoverningEquation {
+  FlowEquation       = "Incompressible"
+  HeatEquation       = "FlowOnly"
+  Buoyancy           = "NoBuoyancy"
+  TimeVariation      = "Unsteady"
+  PDEType            = "NavierStokes" 
+}
+
+
+
+IntrinsicExample {
+  FluidMedium = "water"
+  SolidMedium = "fe"
+  CheckEven   = "yes"
+  Dimension   = "3d"
+}
+
+
+Iteration {
+  LinearSolver[@] {
+    Alias                = "sor2"
+    class                = "sor2sma"
+    MaxIteration         = 50
+    ResidualCriterion    = 1.0e-4
+    ResidualNorm         = "RbyX"
+    ErrorNorm            = "DeltaXbyX"
+    Omega                = 1.1
+    CommMode             = "async"
+  }
+
+  LinearSolver[@] {
+    Alias                = "sor"
+    class                = "sor"
+    MaxIteration         = 50
+    ResidualCriterion    = 1.0e-4
+    ResidualNorm         = "RbyX"
+    ErrorNorm            = "DeltaXbyX"
+    Omega                = 1.1
+  }
+
+  LinearSolver[@] {
+    Alias                = "bicg"
+    class                = "bicgstab"
+    MaxIteration         = 100
+    ResidualCriterion    = 1.0e-4
+    ResidualNorm         = "RbyX"
+    ErrorNorm            = "DeltaXbyX"
+    Preconditioner       = "sor2sma"
+    InnerIteration       = 5
+    Omega                = 1.1
+    CommMode             = "async"
+  }
+
+  DivMaxIteration        = 100
+  DivCriterion           = 1.0e-4
+  DivNorm                = "max" // "L2"
+
+  Pressure    = "bicg"
+  Velocity    = ""
+  Temperature = ""
+}
+
+
+MediumTable {
+
+  water {
+    state               = "Fluid"
+    MassDensity         = 998.2
+    SpecificHeat        = 4182
+    ThermalConductivity = 593e-03
+    KinematicViscosity  = 1.004e-06
+    Viscosity           = 1002.6e-06
+    SpeedOfSound        = 1500.0
+    VolumeExpansion     = 0.04e-3
+  }
+
+  Fe {
+    state               = "Solid"
+    MassDensity         = 7870.0
+    SpecificHeat        = 442.0
+    ThermalConductivity = 80.3
+  }
+
+}
+
+
+MonitorList {
+  Log             = "off"
+  OutputMode      = "Gather"
+  Sampling {
+    TemporalType  = "time"
+    Interval      = 0.1
+  }
+
+  list[@] {
+    type            = "Line"
+    label           = "line1z0"
+    SamplingMethod  = "Interpolation"
+    SamplingMode    = "Fluid"
+    Division        = 64
+    From            = (-0.5, 0.0, 0.0)
+    To              = (0.5, 0.0, 0.0)
+    Variables {
+      velocity      = "on"
+    }
+  }
+
+  list[@] {
+    type            = "Line"
+    label           = "line2z0"
+    SamplingMethod  = "Interpolation"
+    SamplingMode    = "Fluid"
+    Division        = 64
+    From            = (0.0, -0.5, 0.0)
+    To              = (0.0, 0.5, 0.0)
+    Variables {
+      velocity      = "on"
+    }
+  }
+
+  list[@] {
+    type            = "Line"
+    label           = "line1z0.5"
+    SamplingMethod  = "Interpolation"
+    SamplingMode    = "Fluid"
+    Division        = 64
+    From            = (-0.5, 0.0, 0.5)
+    To              = (0.5, 0.0, 0.5)
+    Variables {
+      velocity      = "on"
+    }
+  }
+
+  list[@] {
+    type            = "Line"
+    label           = "line2z0.5"
+    SamplingMethod  = "Interpolation"
+    SamplingMode    = "Fluid"
+    Division        = 64
+    From            = (0.0, -0.5, 0.5)
+    To              = (0.0, 0.5, 0.5)
+    Variables {
+      velocity      = "on"
+    }
+  }
+
+  list[@] {
+    type            = "Line"
+    label           = "line1z0.75"
+    SamplingMethod  = "Interpolation"
+    SamplingMode    = "Fluid"
+    Division        = 64
+    From            = (-0.5, 0.0, 0.75)
+    To              = (0.5, 0.0, 0.75)
+    Variables {
+      velocity      = "on"
+    }
+  }
+
+  list[@] {
+    type            = "Line"
+    label           = "line2z0.75"
+    SamplingMethod  = "Interpolation"
+    SamplingMode    = "Fluid"
+    Division        = 64
+    From            = (0.0, -0.5, 0.75)
+    To              = (0.0, 0.5, 0.75)
+    Variables {
+      velocity      = "on"
+    }
+  }
+}
+
+
+Output {
+  Log {
+    Base             = "On"
+    Profiling        = "On"
+    WallInfo         = "Off"
+    Console {
+      TemporalType   = "Step"
+      Interval       = 1
+    }
+    History {
+      TemporalType   = "Step"
+      Interval       = 1
+    }
+  }
+
+  Data {
+    Format          = "sph"
+    TimeSlice       = "off"
+    DirectoryPath   = "hoge"
+
+    BasicVariables {
+      TemporalType   = "step"
+      Interval       = 100
+
+      TotalPressure  = "Off"
+      Helicity       = "Off"
+      Vorticity      = "Off"
+      Qcriterion     = "Off"
+    }
+
+    StatisticalVariables {
+      TemporalType    = "step"
+      Interval        = 100
+
+      VelocityStat    = "Off"
+      PressureStat    = "Off"
+      TemperatureStat = "Off"
+    }
+  }
+    
+  FormatOption {
+    SPH {
+      GuideOut        = 2
+    }
+
+    PLOT3D {
+      XYZfile         = "on"
+      IblankFile      = "on"
+    }
+  }
+}
+
+
+Reference {
+  Length        = 6.2e-2
+  Velocity      = 1.8e-2
+  //MassDensity   = 1.1763
+  BasePressure  = 0.0
+  Medium        = "water"
+  Temperature {
+    Base       = 20.0
+    Difference = 35.0
+  }
+}
+
+
+ReferenceFrame {
+  Mode = "Stationary"
+}
+
+
+ShapeApproximation {
+  Method = "Binary"
+}
+
+
+SolvingMethod {
+  Flow = "FS_C_EE_D_EE"
+  Heat = "C_EE_D_EE"
+}
+
+
+StartCondition {
+  Restart {
+    Staging     = "off"
+
+    DFIfiles {
+      Velocity    = "vel0.dfi"
+      Pressure    = "prs0.dfi"
+      Fvelocity   = "fvel.dfi"
+    }
+  }
+
+  InitialState {
+    MassDensity = 1.0
+    Pressure    = 0.0
+    Velocity    = (0.0, 0.0, 0.0)
+  }
+}
+
+TimeControl {
+  Acceleration {
+    TemporalType     = "Time"
+    AcceleratingTime = 0.05
+  }
+
+  TimeStep {
+    Mode           = "CFLReferenceVelocity"
+    DeltaT         = 0.1
+  }
+
+  Session {
+    TemporalType   = "time"
+    Start          = 0    // 0 or 0.0の場合initial start
+    End            = 1.0
+  }
+
+  Statistic {
+    TemporalType   = "step"
+    Start          = 400  // 指定区間の平均をとる．両方とも0のときoff
+    End            = 2000 
+  }
+}
+
+
+TurbulenceModeling {
+  Model = "no"
+}
+
+Unit {
+  UnitOfInputParameter  = "Dimensional"
+  UnitOfOutput          = "nonDimensional"
+  Pressure              = "Gauge"
+}

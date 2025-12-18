@@ -1,0 +1,338 @@
+
+ApplicationControl {
+  CheckParameter      = "Off"
+  Operator            = "Kenji_Ono"
+}
+
+
+BCTable {
+
+  Boundary {
+/*
+    outer_wall {
+      kind    = "outer"
+      class   = "Wall"
+      Type    = "fixed"
+      Medium  = "fe"
+    }
+
+    inflow {
+      kind      = "outer"
+      class     = "SpecifiedVelocity"
+      Medium    = "air"
+      Profile   = "Constant"
+      OrientationVector = (1.0, 0.0, 0.0)
+      velocity  = 27.8
+    }
+*/
+    outflow {
+      kind          = "outer"
+      class         = "Outflow"
+      Medium        = "air"
+      PressureType  = "dirichlet"
+      PrsValue      = 0.0
+    }
+
+    tfree {
+      kind    = "outer"
+      class   = "TractionFree"
+      Medium  = "air"
+    }
+    
+    jet {
+      kind   = "outer"
+      class  = "intrinsic"
+      Medium = "air"
+    }
+  }
+
+  OuterBC {
+    Xminus = "jet"
+    Xplus  = "outflow"
+    Yminus = "tfree"
+    Yplus  = "tfree"
+    Zminus = "tfree"
+    Zplus  = "tfree"
+  }
+}
+
+
+ConvectionTerm {
+  Scheme  = "O3MUSCL"
+  Limiter = "minmod"
+}
+
+
+DomainInfo {
+  UnitOfLength   = "M"
+  GlobalOrigin   = (0.0, -1.5, -1.5)
+  GlobalRegion   = (3.0, 3.0, 3.0)
+  //GlobalPitch    = (2.0e-3, 2.0e-3, 2.0e-3)
+
+  GlobalVoxel    = (100   , 100   , 100   )
+  //GlobalDivision = (1    , 1    , 4    )
+
+}
+
+
+FillHint {
+  outer {
+    kind      = "outerface"
+    direction = "Xminus"
+    medium    = "air"
+  }
+}
+
+
+GeometryModel {
+  Source                  = "jet"
+  VoxelOutput             = "bvx"
+}
+
+
+GoverningEquation {
+  FlowEquation       = "Incompressible"
+  HeatEquation       = "FlowOnly"
+  Buoyancy           = "NoBuoyancy"
+  TimeVariation      = "Unsteady"
+  PDEType            = "NavierStokes" 
+}
+
+
+IntrinsicExample {
+  Dimension   = "3d"
+  FluidMedium = "air"
+  SolidMedium = "fe"
+
+  Ring1 {
+    UseRing           = "yes"
+    InnerRadius       = 0.05
+    OuterRadius       = 0.1
+    RotationFrequency = 6.0
+    InletMassFlow     = 2.0e-2
+  }
+
+  Ring2 {
+    UseRing           = "yes"
+    InnerRadius       = 0.15
+    OuterRadius       = 0.2
+    RotationFrequency = -3.0
+    InletMassFlow     = 5.0e-2
+  }
+}
+
+
+Iteration {
+  LinearSolver[@] {
+    Alias                = "sor2"
+    class                = "sor2sma"
+    MaxIteration         = 20
+    ResidualCriterion    = 1.0e-4
+    ResidualNorm         = "RbyB"
+    ErrorNorm            = "DeltaXbyX"
+    Omega                = 1.1
+    CommMode             = "async"
+  }
+
+  LinearSolver[@] {
+    Alias                = "sor"
+    class                = "sor"
+    MaxIteration         = 20
+    ResidualCriterion    = 1.0e-3
+    ResidualNorm         = "RbyX"
+    ErrorNorm            = "DeltaXbyX"
+    Omega                = 1.1
+  }
+
+  LinearSolver[@] {
+    Alias                = "bicg"
+    class                = "bicgstab"
+    MaxIteration         = 100
+    ResidualCriterion    = 1.0e-6
+    ResidualNorm         = "RbyB"
+    ErrorNorm            = "DeltaXbyX"
+	Preconditioner       = "sor2sma"
+    InnerIteration       = 5
+    Omega                = 1.1
+    CommMode             = "async"
+  }
+
+  DivMaxIteration        = 100
+  DivCriterion           = 1.0e-4
+  DivNorm                = "max" // "L2"
+
+  Pressure    = "bicg"
+  Velocity    = ""
+  Temperature = "sor2"   
+}
+
+
+MediumTable {
+
+  air {
+    State               = "Fluid"
+    MassDensity         = 1.1763
+    SpecificHeat        = 1007
+    ThermalConductivity = 2.614e-02
+    KinematicViscosity  = 15.83e-06
+    Viscosity           = 18.62e-06
+    SpeedOfSound        = 340.0
+    VolumeExpansion     = 0.04e-3
+  }
+
+  Fe {
+    State               = "Solid"
+    MassDensity         = 7870.0
+    SpecificHeat        = 442.0
+    ThermalConductivity = 80.3
+  }
+
+}
+
+
+MonitorList {
+  Log                  = "off"
+  OutputMode           = "Gather"
+  Sampling {
+    TemporalType  = "time"
+    Interval      = 2.0e-5
+  }
+
+}
+
+
+Output {
+  Log {
+    Base             = "On"
+    Profiling        = "On"
+    WallInfo         = "Off"
+    Console {
+      TemporalType   = "Step"
+      Interval       = 1
+    }
+    History {
+      TemporalType   = "Step"
+      Interval       = 1
+    }
+  }
+
+  Data {
+    Format          = "sph"
+    TimeSlice       = "off"
+    DirectoryPath   = "hoge"
+
+    BasicVariables {
+      TemporalType   = "step"
+      Interval       = 100
+
+      TotalPressure  = "Off"
+      Helicity       = "Off"
+      Vorticity      = "Off"
+      Qcriterion     = "Off"
+    }
+
+    StatisticalVariables {
+      TemporalType    = "step"
+      Interval        = 100
+
+      VelocityStat    = "Off"
+      PressureStat    = "Off"
+      TemperatureStat = "Off"
+    }
+  }
+    
+  FormatOption {
+    SPH {
+      GuideOut        = 2
+    }
+
+    PLOT3D {
+      XYZfile         = "on"
+      IblankFile      = "on"
+    }
+  }
+}
+
+
+Reference {
+  Length       = 0.1
+  Velocity     = 1.0
+  Temperature {
+    Base       = 20.0
+    Difference = 35.0
+  }
+  Medium       = "air"
+  BasePressure = 0.0
+}
+
+
+ReferenceFrame {
+  Mode = "Stationary"
+}
+
+
+ShapeApproximation {
+  Method = "Binary"
+}
+
+
+SolvingMethod {
+  Flow = "FS_C_EE_D_EE"
+  Heat = "C_EE_D_EE"
+}
+
+
+StartCondition {
+  Restart {
+    Staging     = "off"
+
+    DFIfiles {
+      Velocity    = "vel0.dfi"
+      Pressure    = "prs0.dfi"
+      Fvelocity   = "fvel.dfi"
+    }
+  }
+
+  InitialState {
+    MassDensity = 1.1763
+    Pressure    = 0.0
+    Velocity    = (0.0, 0.0, 0.0)
+  }
+}
+
+
+TimeControl {
+  Acceleration {
+    TemporalType     = "Time"
+    AcceleratingTime = 0.0
+  }
+
+  TimeStep {
+    Mode    = "CFLReferenceVelocity"
+    DeltaT  = 0.1
+  }
+
+  Session {
+    TemporalType     = "step"
+    Start            = 0
+    End              = 20000
+  }
+
+  Statistic {
+    TemporalType   = "step"
+    Start          = 0
+    End            = 0
+  }
+}
+
+
+TurbulenceModeling {
+  Model = "no"
+}
+
+
+Unit {
+  UnitOfInputParameter  = "Dimensional"
+  UnitOfOutput          = "Dimensional"
+  Pressure              = "Gauge"
+}
