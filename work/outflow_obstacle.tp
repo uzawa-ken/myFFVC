@@ -1,51 +1,51 @@
-DomainInfo 
+// =============================================================================
+// FFV-C Input Parameter File
+// External flow around STL geometry (CaseH.stl)
+// Modified to fix divergence issues
+// =============================================================================
+
+DomainInfo
 {
   UnitOfLength   = "M"
   GlobalOrigin   = (0.0,  0.0,  0.0)
   GlobalRegion   = (8.0,  2.0,  4.0)
-//  GlobalPitch    = (1.0,  0.2,  1.0) // 8*10*4
   GlobalPitch    = (0.2,  0.05,  0.1) // 40*40*40
   GlobalDivision = (1,    1,    1)
 }
 
 
-FillHint 
+// -----------------------------------------------------------------------------
+// FillHint: Only use supported parameters (direction, Medium)
+// Note: "kind" and "coordinate" are NOT supported in this version
+// -----------------------------------------------------------------------------
+FillHint
 {
   outer {
-    kind      = "outerface"
     direction = "Xminus"
     medium    = "air"
   }
-
-  inner {
-    kind       = "point"
-    direction = "Xminus"
-    coordinate = (2.0, 0.2, 2.0)
-    medium     = "Fe"
-  }
-
 }
 
 
-TimeControl 
+TimeControl
 {
-  Acceleration 
+  Acceleration
   {
     TemporalType     = "Time"
     AcceleratingTime = 1.0
   }
 
-  TimeStep 
+  TimeStep
   {
     Mode           = "CFLReferenceVelocity"
-    DeltaT         = 0.01
+    DeltaT         = 0.001  // Changed: 0.01 -> 0.001 to satisfy diffusion stability (D < 0.5)
   }
 
-  Session 
+  Session
   {
     TemporalType   = "step"
-    Start          = 0    // 0 or 0.0の場合initial start
-    End            = 1000
+    Start          = 0
+    End            = 10000  // Increased for longer simulation
   }
 
   Average
@@ -55,16 +55,16 @@ TimeControl
     End            = 10000
   }
 
-  Statistic 
+  Statistic
   {
     TemporalType   = "step"
-    Start          = 0  // 指定区間の平均をとる．両方とも0のときoff
-    End            = 10000 
+    Start          = 0
+    End            = 10000
   }
 }
 
 
-ApplicationControl 
+ApplicationControl
 {
   CheckParameter      = "Off"
   Operator            = "Ken_Uzawa"
@@ -72,44 +72,38 @@ ApplicationControl
 }
 
 
-AXB
-{
-   func = "off"
-}
-
-
-ConvectionTerm 
+ConvectionTerm
 {
   Scheme  = "O2central"
   Limiter = "minmod"
 }
 
 
-GeometryModel 
+GeometryModel
 {
   Source                  = "polygon"
   FillMedium              = "air"
   HintOfFillSeedDirection = "no"
   HintOfFillSeedMedium    = "air"
-  VoxelOutput             = "off"
+  VoxelOutput             = "on"   // Enable to check voxelization result
   OutputGlyph             = "off"
 }
 
 
-GoverningEquation 
+GoverningEquation
 {
   FlowEquation       = "Incompressible"
-  HeatEquation       = "ColdFlow"
+  HeatEquation       = "FlowOnly"  // Changed: ColdFlow -> FlowOnly (simpler)
   Buoyancy           = "NoBuoyancy"
   TimeVariation      = "Unsteady"
-  PDEType            = "NavierStokes" 
+  PDEType            = "NavierStokes"
 }
 
 
-IntrinsicExample 
+IntrinsicExample
 {
   FluidMedium        = "air"
-  SolidMedium        = "fe"
+  SolidMedium        = "Fe"
   CheckEven          = "yes"
   Dimension          = "3d"
 }
@@ -152,7 +146,7 @@ Iteration {
 
   DivMaxIteration        = 100
   DivCriterion           = 1.0e-4
-  DivNorm                = "max" // "L2"
+  DivNorm                = "max"
 
   Pressure    = "sor2"
   Velocity    = ""
@@ -160,15 +154,15 @@ Iteration {
 }
 
 
-MediumTable 
+MediumTable
 {
   Air {
     state               = "Fluid"
     MassDensity         = 1.0
     SpecificHeat        = 1007
     ThermalConductivity = 2.614e-02
-    KinematicViscosity  = 2.18e-04
-    Viscosity           = 2.18e-04
+    KinematicViscosity  = 1.0e-03  // Changed: increased for lower Re
+    Viscosity           = 1.0e-03
     SpeedOfSound        = 340.0
     VolumeExpansion     = 0.04e-3
   }
@@ -182,7 +176,7 @@ MediumTable
 }
 
 
-MonitorList 
+MonitorList
 {
   Log             = "Off"
   OutputMode      = "Gather"
@@ -197,21 +191,8 @@ MonitorList
     SamplingMethod  = "Interpolation"
     SamplingMode    = "Fluid"
     Division        = 64
-    From            = (-0.5, 0.0, 0.0)
-    To              = (0.5, 0.0, 0.0)
-    Variables {
-      velocity      = "on"
-    }
-  }
-
-  list[@] {
-    type            = "Line"
-    label           = "line2"
-    SamplingMethod  = "Interpolation"
-    SamplingMode    = "Fluid"
-    Division        = 64
-    From            = (0.0, 0.0, -0.5)
-    To              = (0.0, 0.0, 0.5)
+    From            = (1.0, 1.0, 2.0)
+    To              = (7.0, 1.0, 2.0)
     Variables {
       velocity      = "on"
     }
@@ -219,9 +200,9 @@ MonitorList
 }
 
 
-Output 
+Output
 {
-  Log 
+  Log
   {
     Base             = "On"
     Iteration        = "Off"
@@ -229,24 +210,24 @@ Output
     WallInfo         = "Off"
     Console {
       TemporalType   = "Step"
-      Interval       = 1
+      Interval       = 100  // Output every 100 steps
     }
     History {
       TemporalType   = "Step"
-      Interval       = 1
+      Interval       = 100
     }
   }
 
-  Data 
+  Data
   {
     Format          = "sph"
     TimeSlice       = "off"
     DirectoryPath   = "sph"
 
-    BasicVariables 
+    BasicVariables
     {
       TemporalType   = "step"
-      Interval       = 10000
+      Interval       = 1000
       TotalPressure  = "Off"
       Helicity       = "Off"
       Vorticity      = "Off"
@@ -256,16 +237,16 @@ Output
 
     StatisticalVariables {
       TemporalType    = "step"
-      Interval        = 10000
+      Interval        = 1000
 
       VelocityStat    = "On"
       PressureStat    = "Off"
       TemperatureStat = "Off"
     }
   }
-    
+
   FormatOption {
-    SPH 
+    SPH
     {
       GuideOut      = 1
       TimeSlice     = "off"
@@ -275,42 +256,42 @@ Output
 }
 
 
-Reference 
+Reference
 {
   Length        = 1.0
-  Velocity      = 1.0
+  Velocity      = 0.1
   BasePressure  = 0.0
   Medium        = "air"
-  Temperature 
+  Temperature
   {
     Base       = 20.0
     Difference = 35.0
   }
-  Reynolds      = 4500.0
+  Reynolds      = 100.0   // Changed: 4500 -> 100 (start with low Re)
   Prandtl       = 0.71
 }
 
 
-ReferenceFrame 
+ReferenceFrame
 {
   Mode = "Stationary"
 }
 
 
-ShapeApproximation 
+ShapeApproximation
 {
   Method = "Binary"
 }
 
 
-SolvingMethod 
+SolvingMethod
 {
-  Flow = "FS_C_AB_D_AB"
+  Flow = "FS_C_EE_D_EE"   // Changed: AB -> EE (Euler Explicit, more stable)
   Heat = "C_EE_D_EE"
 }
 
 
-StartCondition 
+StartCondition
 {
   Restart {
     Staging     = "off"
@@ -325,29 +306,19 @@ StartCondition
   InitialState {
     MassDensity = 1.0
     Pressure    = 0.0
-    Velocity    = (0.0, 0.0, 0.0)
-
-    Perturbation
-    {
-      DirectionOfChannelWall  = "Y"
-      ChannelWidth            = 2.0
-      BulkVelocity            = 0.5
-      TubulenceReynoldsNumber = 300.0
-    } 
+    Velocity    = (0.1, 0.0, 0.0)  // Changed: match inlet velocity
   }
 }
 
 
-
-TurbulenceModeling 
+TurbulenceModeling
 {
-  Model                  = "CSM"
+  Model                  = "no"  // Changed: disable turbulence model for initial testing
   Cs                     = 0.2
   InitialPerturbation    = "off"
-  VelocityProfile        = "NoSlip"
 }
 
-Unit 
+Unit
 {
   UnitOfInputParameter   = "Dimensional"
   UnitOfOutput           = "Dimensional"
@@ -362,9 +333,9 @@ TreatmentOfWall
 }
 
 
-BcTable 
+BcTable
 {
-  Boundary 
+  Boundary
   {
     obstacle
     {
@@ -374,18 +345,17 @@ BcTable
       filepath           = "./geometry/CaseH.stl"
     }
 
-    inflow 
+    inflow
     {
       kind               = "outer"
       class              = "SpecifiedVelocity"
       Profile            = "Constant"
       OrientationVector  = (1.0, 0.0, 0.0)
       velocity           = 0.1
-      Temperature        = 25.0
       Medium             = "air"
     }
-      
-    outflow 
+
+    outflow
     {
       kind               = "outer"
       class              = "Outflow"
@@ -394,39 +364,29 @@ BcTable
       Medium             = "air"
     }
 
-    outerWall 
+    outerWall
     {
       kind               = "outer"
       class              = "Wall"
       Type               = "fixed"
-      Medium             = "fe"
+      Medium             = "Fe"
     }
 
-    periodic
+    symmetric
     {
       kind               = "outer"
-      class              = "periodic"
-      mode               = "SimpleCopy"
+      class              = "Symmetric"
       Medium             = "air"
     }
-
-/*
-    tfree 
-    {
-      kind               = "outer"
-      class              = "TractionFree"
-      Medium             = "air"
-    }
-*/
   }
 
-  OuterBC 
+  OuterBC
   {
     Xminus = "inflow"
     Xplus  = "outflow"
     Yminus = "outerWall"
     Yplus  = "outerWall"
-    Zminus = "periodic"
-    Zplus  = "periodic"
+    Zminus = "symmetric"   // Changed: periodic -> symmetric (simpler)
+    Zplus  = "symmetric"
   }
 }

@@ -6,5 +6,4 @@ Polylib {
     label      = "Fe"
     type       = "Obstacle"
   }
-
 }

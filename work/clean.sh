@@ -1,3 +1,9 @@
 #!/bin/bash
+# Clean up output files
 
-rm -rf hoge *.txt *.dat sph *dfi *svx  HPCPF* *vtk *sph
+rm -rf sph
+rm -f ffvc.log
+rm -f *.dfi
+rm -f polylib.tp.bak
+
+echo "Cleaned up output files."
