@@ -45,7 +45,6 @@
 	 No.        Kind       Medium   Direction / Coordinate(ND)
 	--------------------------------------------------------------------------
 	  1          air   Direction = X-
-	  2           fe   Direction = X-
 
 ----------
 
@@ -61,9 +60,9 @@
 	<< ALL PROCESSES >>
 	   Polygon Group Label       Medium Alias              Local BC     Polygons          Area
 	   ---------------------------------------------------------------------------------------
-	              obstacle                 Fe              Obstacle           12  9.600000e-01
+	              obstacle                 Fe              Obstacle            8  6.400000e-01
 
-	>> Memory required for Polygon :  Global=  2.51 (KB) : Local=  2.51 (KB)
+	>> Memory required for Polygon :  Global=  2.15 (KB) : Local=  2.15 (KB)
 
 
 
@@ -71,7 +70,7 @@
 
 	>> Calculate cut and quantize
 
-	quantize cut = 810
+	quantize cut = 1056
 
 
 	Minimum non-dimensional distance except on a center = 9.980431e-02
@@ -81,16 +80,16 @@
 
 	>> Global Domain Information
 
-	imax, jmax, kmax    =            32             4            32     >>   4.10 (K cells)
+	imax, jmax, kmax    =            32             8            32     >>   8.19 (K cells)
 
-	(dx, dy, dz)  [m] / [-] = ( 3.125000e-02  5.000000e-02  3.125000e-02)  /  ( 3.125000e-02  5.000000e-02  3.125000e-02)
+	(dx, dy, dz)  [m] / [-] = ( 3.125000e-02  2.500000e-02  3.125000e-02)  /  ( 3.125000e-02  2.500000e-02  3.125000e-02)
 	(ox, oy, oz)  [m] / [-] = (-5.000000e-01 -1.000000e-01 -5.000000e-01)  /  (-5.000000e-01 -1.000000e-01 -5.000000e-01)
 	(Lx, Ly, Lz)  [m] / [-] = ( 1.000000e+00  2.000000e-01  1.000000e+00)  /  ( 1.000000e+00  2.000000e-01  1.000000e+00)
 
 
 ----------
 
-	>> Memory required for Preprocessor :  Global=895.53 (KB) : Local=895.53 (KB)
+	>> Memory required for Preprocessor :  Global=  1.31 (MB) : Local=  1.31 (MB)
 
 
 
@@ -100,17 +99,17 @@
 
 	Fill initialize -----
 
-		Total cell count       =             4096
-		Initial target count   =             4096
+		Total cell count       =             8192
+		Initial target count   =             8192
 
 	Fill -----
 
-		Painted FLUID cells by hint       =               60
-		Remaining cells to paint          =             4036
+		Painted FLUID cells by hint       =              180
+		Remaining cells to paint          =             8012
 
 		Connected fill Iteration          =     5
-		               Filled by FLUID    =             3460
-		               Remaining cells    =              576
+		               Filled by FLUID    =             6860
+		               Remaining cells    =             1152
 
 
  ================
@@ -150,9 +149,9 @@
 
 	  No :   # of Faces/Cells       State  In/Out                   Label : Class                                 Medium
 	------------------------------------------------------------------------------------------------------------------------------
-	   1 :               3520       Fluid                             Air : Medium                                Air                 
-	   2 :                576       Solid                              Fe : Medium                                Fe                  
-	   3 :                192       Solid  Inner                 obstacle : Obstacle                              Fe                  
+	   1 :               7040       Fluid                             Air : Medium                                Air                 
+	   2 :               1152       Solid                              Fe : Medium                                Fe                  
+	   3 :                384       Solid  Inner                 obstacle : Obstacle                              Fe                  
 	   4 :                  0       Solid  Outer                outerWall : Outer BC                              fe                  
 	   5 :                  0       Solid  Outer                slideWall : Outer BC                              fe                  
 
@@ -161,7 +160,7 @@
 
 	[Obstacle]
 	 no                    Label    i_st    i_ed    j_st    j_ed    k_st    k_ed   Area[m*m]    Elements
-	  3                 obstacle      10      23       1       4      10      23  9.6000e-01         192
+	  3                 obstacle      10      23       1       8      10      23  6.4000e-01         384
 
 
 ----------
@@ -217,10 +216,10 @@
 	Time Control
 	     Acceleration Time        :    1.00000e+00 [sec] /  1.00000e+00 [-]
 	     Statistic Start          :   OFF
-	     Time Increment dt        :    3.12500e-03 [sec] /  3.12500e-03 [-] : CFL [ 0.10000] with Reference velocity
+	     Time Increment dt        :    1.25000e-03 [sec] /  1.25000e-03 [-] : CFL [ 0.05000] with Reference velocity
 	     Calculation Start        :    0.00000e+00 [sec] /  0.00000e+00 [-] :            0 [step]
-	     Calculation End          :    3.12500e+00 [sec] /  3.12500e+00 [-] :         1000 [step]
-	     Calculation Period       :    3.12500e+00 [sec] /  3.12500e+00 [-] :         1000 [step]
+	     Calculation End          :    2.50000e+00 [sec] /  2.50000e+00 [-] :         2000 [step]
+	     Calculation Period       :    2.50000e+00 [sec] /  2.50000e+00 [-] :         2000 [step]
 
 	Start Mode
 	     Start Condition          :   Impulsive start
@@ -258,17 +257,18 @@
 
 	Parameter of Linear Equation
 	     1st Pressure Iteration 
-	       Linear Solver          :   2-colored SOR SMA (Stride Memory Access, Bit compressed 1-decode)
-	       Iteration max          :   500
-	       Residual Norm type     :   r_x  : Residual vector divided by solution vector x
+	       Linear Solver          :   BiCGstab with Preconditioner SOR2SMA
+	       Iteration max          :   1000
+	       Residual Norm type     :   r_b  : Residual vector divided by constant vector b
 	       Threshold for residual :   1.000e-04
 	       Error    Norm type     :   dx_x : Increment vector x(k+1)-x(k) divided by solution vector x(k)
 	       Threshold for error    :   8.880e-16
+	       Inner Iteration        :   10
 	       Coef. of Acceleration  :   1.100e+00
 	       Communication Mode     :   ASYNC
 
 	     Div Iteration 
-	       Iteration max          :   500
+	       Iteration max          :   50
 	       Error    Norm type     :   Max divergence
 	       Threshold for Div.     :   1.000e-04
 
@@ -302,7 +302,7 @@
 	Mach number               [-]         :  2.94118e-03
 
 	Spacing         X-dir.    [m] / [-]   :  3.12500e-02 /  3.12500e-02
-	                Y-dir.    [m] / [-]   :  5.00000e-02 /  5.00000e-02
+	                Y-dir.    [m] / [-]   :  2.50000e-02 /  2.50000e-02
 	                Z-dir.    [m] / [-]   :  3.12500e-02 /  3.12500e-02
 	Time Scale                [sec]       :  1.00000e+00
 
@@ -329,8 +329,8 @@
 
 	>> Effective cells and Open Area of Computational Domain
 
-	Fluid  cell inside whole Computational domain =            3520 ( 85.9375 %)
-	Active cell                                   =            3520 ( 85.9375 %)
+	Fluid  cell inside whole Computational domain =            7040 ( 85.9375 %)
+	Active cell                                   =            7040 ( 85.9375 %)
 
 	Face :      Element (Open ratio)
 	  X- :            0 (  0.00 %)
@@ -378,7 +378,7 @@
 
 ----------
 
-	>> Memory required for Solver :  Global=  2.27 (MB) : Local=  2.27 (MB)
+	>> Memory required for Solver :  Global=  4.51 (MB) : Local=  4.51 (MB)
 
 
 

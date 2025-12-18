@@ -2,7 +2,7 @@ Domain {
 
   GlobalOrigin        = (-5.000000e-01, -1.000000e-01, -5.000000e-01)
   GlobalRegion        = (1.000000e+00, 2.000000e-01, 1.000000e+00)
-  GlobalVoxel         = (32, 4, 32)
+  GlobalVoxel         = (32, 8, 32)
   GlobalDivision      = (1, 1, 1)
   ActiveSubdomainFile = ""
 
@@ -21,9 +21,9 @@ Process {
 
     ID        = 0
     HostName  = "DESKTOP-PC"
-    VoxelSize = (32, 4, 32)
+    VoxelSize = (32, 8, 32)
     HeadIndex = (1, 1, 1)
-    TailIndex = (32, 4, 32)
+    TailIndex = (32, 8, 32)
 
     CellID    = 0
     BCflagID  = 0

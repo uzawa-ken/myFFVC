@@ -78,7 +78,7 @@ GeometryModel {
 
 GoverningEquation {
   FlowEquation       = "Incompressible"
-  HeatEquation       = "FlowOnly"   // Changed: ColdFlow -> FlowOnly
+  HeatEquation       = "ColdFlow"   // Changed: ColdFlow -> FlowOnly
   Buoyancy           = "NoBuoyancy"
   TimeVariation      = "Unsteady"
   PDEType            = "NavierStokes"

@@ -57,82 +57,162 @@ TimeSlice {
   }
   Slice[@] {
     Step = 100
-    Time = 3.125000e-01
+    Time = 1.250000e-01
     MinMax[@] {
-      Min = -3.371198e-02
-      Max = 3.437212e-02
+      Min = -6.130415e-03
+      Max = 6.134197e-03
     }
   }
   Slice[@] {
     Step = 200
-    Time = 6.250000e-01
+    Time = 2.500000e-01
     MinMax[@] {
-      Min = -8.932684e-02
-      Max = 1.108146e-01
+      Min = -2.285380e-02
+      Max = 2.304942e-02
     }
   }
   Slice[@] {
     Step = 300
-    Time = 9.375000e-01
+    Time = 3.750000e-01
     MinMax[@] {
-      Min = -9.527472e-02
-      Max = 1.970951e-01
+      Min = -4.625335e-02
+      Max = 4.793706e-02
     }
   }
   Slice[@] {
     Step = 400
-    Time = 1.250000e+00
+    Time = 5.000000e-01
     MinMax[@] {
-      Min = -7.346072e-02
-      Max = 2.608535e-01
+      Min = -7.093622e-02
+      Max = 7.816129e-02
     }
   }
   Slice[@] {
     Step = 500
-    Time = 1.562500e+00
+    Time = 6.250000e-01
     MinMax[@] {
-      Min = -6.764865e-02
-      Max = 3.010848e-01
+      Min = -9.114954e-02
+      Max = 1.117437e-01
     }
   }
   Slice[@] {
     Step = 600
-    Time = 1.875000e+00
+    Time = 7.500000e-01
     MinMax[@] {
-      Min = -6.571087e-02
-      Max = 3.214265e-01
+      Min = -1.024516e-01
+      Max = 1.471660e-01
     }
   }
   Slice[@] {
     Step = 700
-    Time = 2.187500e+00
+    Time = 8.750000e-01
     MinMax[@] {
-      Min = -6.487475e-02
-      Max = 3.313899e-01
+      Min = -1.030854e-01
+      Max = 1.823810e-01
     }
   }
   Slice[@] {
     Step = 800
-    Time = 2.500000e+00
+    Time = 1.000000e+00
     MinMax[@] {
-      Min = -6.458501e-02
-      Max = 3.359160e-01
+      Min = -9.409592e-02
+      Max = 2.130872e-01
     }
   }
   Slice[@] {
     Step = 900
-    Time = 2.812500e+00
+    Time = 1.125000e+00
     MinMax[@] {
-      Min = -6.459549e-02
-      Max = 3.377448e-01
+      Min = -8.377893e-02
+      Max = 2.389773e-01
     }
   }
   Slice[@] {
     Step = 1000
-    Time = 3.125000e+00
+    Time = 1.250000e+00
     MinMax[@] {
-      Min = -6.475729e-02
-      Max = 3.383423e-01
+      Min = -7.758276e-02
+      Max = 2.620478e-01
+    }
+  }
+  Slice[@] {
+    Step = 1100
+    Time = 1.375000e+00
+    MinMax[@] {
+      Min = -7.388282e-02
+      Max = 2.807219e-01
+    }
+  }
+  Slice[@] {
+    Step = 1200
+    Time = 1.500000e+00
+    MinMax[@] {
+      Min = -7.160008e-02
+      Max = 2.950031e-01
+    }
+  }
+  Slice[@] {
+    Step = 1300
+    Time = 1.625000e+00
+    MinMax[@] {
+      Min = -7.011323e-02
+      Max = 3.057305e-01
+    }
+  }
+  Slice[@] {
+    Step = 1400
+    Time = 1.750000e+00
+    MinMax[@] {
+      Min = -6.909175e-02
+      Max = 3.139773e-01
+    }
+  }
+  Slice[@] {
+    Step = 1500
+    Time = 1.875000e+00
+    MinMax[@] {
+      Min = -6.836464e-02
+      Max = 3.203642e-01
+    }
+  }
+  Slice[@] {
+    Step = 1600
+    Time = 2.000000e+00
+    MinMax[@] {
+      Min = -6.784117e-02
+      Max = 3.251518e-01
+    }
+  }
+  Slice[@] {
+    Step = 1700
+    Time = 2.125000e+00
+    MinMax[@] {
+      Min = -6.746862e-02
+      Max = 3.286310e-01
+    }
+  }
+  Slice[@] {
+    Step = 1800
+    Time = 2.250000e+00
+    MinMax[@] {
+      Min = -6.721207e-02
+      Max = 3.311469e-01
+    }
+  }
+  Slice[@] {
+    Step = 1900
+    Time = 2.375000e+00
+    MinMax[@] {
+      Min = -6.704574e-02
+      Max = 3.329600e-01
+    }
+  }
+  Slice[@] {
+    Step = 2000
+    Time = 2.500000e+00
+    MinMax[@] {
+      Min = -6.694967e-02
+      Max = 3.342356e-01
     }
   }
 }

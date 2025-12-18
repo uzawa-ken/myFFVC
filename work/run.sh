@@ -4,4 +4,4 @@
 
 ./clean.sh
 
-ffvc-mpi cavity.tp
+ffvc-mpi cavity_improved.tp

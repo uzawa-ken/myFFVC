@@ -1,41 +1,41 @@
-	imax, jmax, kmax    =            32             4            32     >>   4.10 (K cells)
+	imax, jmax, kmax    =            32             8            32     >>   8.19 (K cells)
 
-	(dx, dy, dz)  [m] / [-] = ( 3.125000e-02  5.000000e-02  3.125000e-02)  /  ( 3.125000e-02  5.000000e-02  3.125000e-02)
+	(dx, dy, dz)  [m] / [-] = ( 3.125000e-02  2.500000e-02  3.125000e-02)  /  ( 3.125000e-02  2.500000e-02  3.125000e-02)
 	(ox, oy, oz)  [m] / [-] = (-5.000000e-01 -1.000000e-01 -5.000000e-01)  /  (-5.000000e-01 -1.000000e-01 -5.000000e-01)
 	(Lx, Ly, Lz)  [m] / [-] = ( 1.000000e+00  2.000000e-01  1.000000e+00)  /  ( 1.000000e+00  2.000000e-01  1.000000e+00)
 
 
 Domain    0
-	 ix, jx,  kx        [-] =             32             4            32
+	 ix, jx,  kx        [-] =             32             8            32
 	(ox, oy, oz)  [m] / [-] = (-5.000000e-01 -1.000000e-01 -5.000000e-01)  /  (-5.000000e-01 -1.000000e-01 -5.000000e-01)
 	(Lx, Ly, Lz)  [m] / [-] = ( 1.000000e+00  2.000000e-01  1.000000e+00)  /  ( 1.000000e+00  2.000000e-01  1.000000e+00)
 
 	 no            Label    i_st    i_ed    j_st    j_ed    k_st    k_ed
-	  3         obstacle      10      23       1       4      10      23
+	  3         obstacle      10      23       1       8      10      23
 	  4        outerWall       0       0       0       0       0       0
 	  5        slideWall       0       0       0       0       0       0
 
 
 	--------------------------------------------------
 	Report of Whole Domain Statistics
-	Domain size         =      32       4      32
-	Number of voxels    = 4.096000e+03
-	Number of surface   = 2.560000e+03
-	Effective voxels    = 3.520000e+03 ( 85.94%)
-	Fluid voxels        = 3.520000e+03 ( 85.94%)
-	Wall  voxels        = 5.760000e+02 ( 14.06%)
+	Domain size         =      32       8      32
+	Number of voxels    = 8.192000e+03
+	Number of surface   = 3.072000e+03
+	Effective voxels    = 7.040000e+03 ( 85.94%)
+	Fluid voxels        = 7.040000e+03 ( 85.94%)
+	Wall  voxels        = 1.152000e+03 ( 14.06%)
 	Division :          = 1 : Serial
 
 	--------------------------------------------------
 	Domain Statistics per MPI process
-	Mean volume in each domain           = 4.096000e+03
+	Mean volume in each domain           = 8.192000e+03
 	Std. deviation of domain             = 0.000000e+00
 	Mean comm. in each domain            = 0.000000e+00
 	Std. deviation of surface            = 0.000000e+00
-	Mean effective volume in each domain = 3.520000e+03
+	Mean effective volume in each domain = 7.040000e+03
 	Std. deviation of effective volume   = 0.000000e+00
 
 	Domain :     ix     jx     kx       Volume Vol_dv[%]      Surface Srf_dv[%] Fluid[%] Solid[%]      Eff_Vol Eff_Vol_dv[%]      Eff_Srf Eff_srf_dv[%]  Itr_scheme
 	----------------------------------------------------------------------------------------------------
-	     0 :     32      4     32   4.0960e+03     0.000   0.0000e+00     0.000   85.938   14.062   3.5200e+03         0.000 
+	     0 :     32      8     32   8.1920e+03     0.000   0.0000e+00     0.000   85.938   14.062   7.0400e+03         0.000 
 	---------------------------------------------------------------------------------------------------------------------------------------------------------------------
