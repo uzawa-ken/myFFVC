@@ -1,0 +1,357 @@
+// =============================================================================
+// FFV-C High Accuracy Input Parameter File
+// Lid-driven Cavity with STL obstacle
+// All accuracy improvements applied
+// =============================================================================
+
+ApplicationControl {
+  CheckParameter = "off"
+  DryRunBC       = "off"
+  Operator       = "Kenji_Ono"
+}
+
+AXB {
+  Func = "off"
+}
+
+BcTable {
+
+  Boundary {
+    obstacle
+    {
+      kind               = "inner"
+      class              = "Obstacle"
+      Medium             = "Fe"
+      filepath           = "./geometry/obstacle.stl"
+    }
+
+    outerWall {
+      kind        = "outer"
+      class       = "Wall"
+      Type        = "fixed"
+      Medium      = "fe"
+    }
+
+    slideWall {
+      kind              = "outer"
+      class             = "wall"
+      Type              = "slide"
+      Profile           = "Constant"
+      OrientationVector = (1.0, 0.0, 0.0)
+      Velocity          = 1.0
+      Medium            = "fe"
+    }
+
+  }
+  OuterBC {
+    Xminus = "outerWall"
+    Xplus  = "outerWall"
+    Yminus = "outerWall"
+    Yplus  = "outerWall"
+    Zminus = "outerWall"
+    Zplus  = "slideWall"
+  }
+}
+
+
+ConvectionTerm {
+  // Changed: O3muscl for higher accuracy (3rd order)
+  Scheme  = "O3muscl"
+  Limiter = "minmod"
+}
+
+
+DomainInfo {
+  UnitOfLength   = "NonDimensional"
+  GlobalOrigin   = (-0.5, -0.5, -0.5)
+  // Changed: Cubic domain for isotropic resolution
+  GlobalRegion   = (1.0, 1.0, 1.0)
+  // Changed: 32x32x32 for proper 3D resolution
+  GlobalVoxel    = (32, 32, 32)
+}
+
+
+FillHint {
+  outer {
+    direction = "Xminus"
+    medium    = "air"
+  }
+}
+
+
+GeometryModel {
+  Source        = "polygon"
+  VoxelOutput   = "on"
+}
+
+
+GoverningEquation {
+  FlowEquation       = "Incompressible"
+  HeatEquation       = "ColdFlow"
+  Buoyancy           = "NoBuoyancy"
+  TimeVariation      = "Unsteady"
+  PDEType            = "NavierStokes"
+}
+
+
+IntrinsicExample {
+  FluidMedium = "air"
+  SolidMedium = "fe"
+  CheckEven   = "yes"
+  Dimension   = "3d"
+}
+
+
+Iteration {
+  // High-accuracy SOR2 solver
+  LinearSolver[@] {
+    Alias                = "sor2"
+    class                = "sor2sma"
+    MaxIteration         = 2000       // Increased: 500 -> 2000
+    ResidualCriterion    = 1.0e-6     // Tightened: 1.0e-4 -> 1.0e-6
+    ResidualNorm         = "RbyB"     // Changed: RbyX -> RbyB (more stable)
+    ErrorNorm            = "DeltaXbyX"
+    Omega                = 1.2        // Optimized for 3D
+    CommMode             = "async"
+  }
+
+  // Standard SOR solver
+  LinearSolver[@] {
+    Alias                = "sor"
+    class                = "sor"
+    MaxIteration         = 2000
+    ResidualCriterion    = 1.0e-6
+    ResidualNorm         = "RbyB"
+    ErrorNorm            = "DeltaXbyX"
+    Omega                = 1.2
+  }
+
+  // BiCGSTAB solver (primary for pressure)
+  LinearSolver[@] {
+    Alias                = "bicg"
+    class                = "bicgstab"
+    MaxIteration         = 2000       // Increased
+    ResidualCriterion    = 1.0e-6     // Tightened
+    ResidualNorm         = "RbyB"
+    ErrorNorm            = "DeltaXbyX"
+    Preconditioner       = "sor2sma"
+    InnerIteration       = 20         // Increased: 5 -> 20
+    Omega                = 1.1
+    CommMode             = "async"
+  }
+
+  // Divergence iteration settings
+  DivMaxIteration        = 200        // Increased: 50 -> 200
+  DivCriterion           = 1.0e-6     // Tightened: 1.0e-4 -> 1.0e-6
+  DivNorm                = "max"
+
+  // Changed: Use BiCGSTAB for pressure (better convergence)
+  Pressure    = "bicg"
+  Velocity    = ""
+  Temperature = ""
+}
+
+
+MediumTable {
+
+  Air {
+    state               = "Fluid"
+    MassDensity         = 1.1763
+    SpecificHeat        = 1007
+    ThermalConductivity = 2.614e-02
+    KinematicViscosity  = 15.83e-06
+    Viscosity           = 18.62e-06
+    SpeedOfSound        = 340.0
+    VolumeExpansion     = 0.04e-3
+  }
+
+  Fe {
+    state               = "Solid"
+    MassDensity         = 7870.0
+    SpecificHeat        = 442.0
+    ThermalConductivity = 80.3
+  }
+}
+
+
+MonitorList {
+  Log             = "Off"
+  OutputMode      = "gather"
+  Sampling {
+    TemporalType  = "step"
+    Interval      = 10
+  }
+
+  // Center line velocity profile (for validation)
+  list[@] {
+    type            = "Line"
+    label           = "centerline_x"
+    SamplingMethod  = "Interpolation"
+    SamplingMode    = "Fluid"
+    Division        = 64
+    From            = (-0.5, 0.0, 0.0)
+    To              = (0.5, 0.0, 0.0)
+    Variables {
+      velocity      = "on"
+      pressure      = "on"
+    }
+  }
+
+  list[@] {
+    type            = "Line"
+    label           = "centerline_z"
+    SamplingMethod  = "Interpolation"
+    SamplingMode    = "Fluid"
+    Division        = 64
+    From            = (0.0, 0.0, -0.5)
+    To              = (0.0, 0.0, 0.5)
+    Variables {
+      velocity      = "on"
+      pressure      = "on"
+    }
+  }
+}
+
+
+Output {
+  Log {
+    Base             = "On"
+    Iteration        = "On"          // Enable iteration log
+    Profiling        = "On"
+    WallInfo         = "Off"
+    Console {
+      TemporalType   = "Step"
+      Interval       = 10            // More frequent output
+    }
+    History {
+      TemporalType   = "Step"
+      Interval       = 1
+    }
+  }
+
+  Data {
+    Format          = "sph"
+    TimeSlice       = "off"
+    DirectoryPath   = "result"
+
+    BasicVariables {
+      TemporalType   = "step"
+      Interval       = 100
+
+      TotalPressure  = "Off"
+      Helicity       = "Off"
+      Vorticity      = "On"          // Enable for flow visualization
+      Qcriterion     = "On"          // Enable for vortex identification
+      Divergence     = "On"
+    }
+
+    StatisticalVariables {
+      TemporalType    = "step"
+      Interval        = 100
+
+      VelocityStat    = "On"
+      PressureStat    = "On"
+      TemperatureStat = "Off"
+      ReynoldsStress  = "On"
+    }
+  }
+
+  FormatOption {
+    SPH {
+      GuideOut        = 2
+    }
+
+    PLOT3D {
+      XYZfile         = "on"
+      IblankFile      = "on"
+    }
+  }
+}
+
+
+Reference {
+  Length        = 1.0
+  Velocity      = 1.0
+  BasePressure  = 0.0
+  Medium        = "air"
+  Temperature {
+    Base       = 20.0
+    Difference = 35.0
+  }
+  Reynolds      = 1000.0
+  Prandtl       = 0.71
+}
+
+
+ReferenceFrame {
+  Mode = "Stationary"
+}
+
+
+ShapeApproximation {
+  Method = "Binary"
+}
+
+
+SolvingMethod {
+  Flow = "FS_C_EE_D_EE"
+  Heat = "C_EE_D_EE"
+}
+
+
+StartCondition {
+  Restart {
+    Staging     = "off"
+
+    DFIfiles {
+      Velocity    = "vel.dfi"
+      Pressure    = "prs.dfi"
+      Fvelocity   = "fvel.dfi"
+      Instantaneous = "field.dfi"
+      Statistic     = "field_stat.dfi"
+    }
+  }
+
+  InitialState {
+    MassDensity = 1.0
+    Pressure    = 0.0
+    Velocity    = (0.0, 0.0, 0.0)
+  }
+}
+
+TimeControl {
+  Acceleration {
+    TemporalType     = "Time"
+    AcceleratingTime = 0.5           // Shorter acceleration
+  }
+
+  TimeStep {
+    Mode           = "CFLReferenceVelocity"
+    DeltaT         = 0.02            // Reduced: 0.1 -> 0.02
+  }
+
+  Session {
+    TemporalType   = "step"
+    Start          = 0
+    End            = 5000            // Longer simulation
+  }
+
+  Statistic {
+    TemporalType   = "step"
+    Start          = 3000            // Start statistics after flow develops
+    End            = 5000
+  }
+}
+
+
+TurbulenceModeling {
+  Model = "no"
+  Cs    = 0.2
+  InitialPerturbation = "off"
+}
+
+Unit {
+  UnitOfInputParameter  = "nonDimensional"
+  UnitOfOutput          = "nonDimensional"
+  Pressure              = "Gauge"
+}
