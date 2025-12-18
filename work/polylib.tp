@@ -1,9 +1,10 @@
 Polylib {
   obstacle {
     class_name = "PolygonGroup"
-    filepath   = "./geometry/CaseH.stl"
+    filepath   = "./geometry/obstacle.stl"
     movable    = "false"
     label      = "Fe"
     type       = "Obstacle"
   }
+
 }
